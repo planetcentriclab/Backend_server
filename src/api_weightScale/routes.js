@@ -24,7 +24,7 @@ router.post("/profile_of_waste/add", controller.newWaste) //? optional
 router.get("/record/all", controller.selectAll_record) //*
 router.get("/record/summary", controller.summary) //!
 router.post("/record/add", controller.newRecord) //*
-router.get("/record/oldDayRecord", controller.oldDayRecord) //*
+router.get("/record/oldDayRecord", controller.oldDayRecord) //** */
 
 
 module.exports = router
