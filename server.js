@@ -39,5 +39,4 @@ app.use("/api/v1/weightScale/", Route_weightScale)
 //Todo: ----------------------------------------------------------------------
 sslServer.listen(port, () => console.log('Secure server at ' + port))
 
-
 //! Planetcentric account playit.gg is --> https://books-opening.gl.at.ply.gg:61345 (localhost:9999)  https://books-opening.gl.at.ply.gg:61345/api/v1/weightScale/machine/delete
