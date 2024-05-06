@@ -12,7 +12,7 @@ const selectAll_faculty = `Select Distinct faculty from "machine"`
 const selectAll_machine = `Select create_date, faculty, machine_name, all_profile from "machine" Order By create_date Desc, create_time Desc, machine_name Desc`
 const checkMachine_nameExists = `Select s from "machine" s where s.machine_name = $1`
 const newMachine = `insert into "machine" (create_date, faculty, machine_name, all_profile, create_time) values($1, $2, $3, $4, $5)`
-const editMachine = `Update "machine" Set machine_name = $1, faculty = $2, all_profile = $3 Where machine_name = $1`
+const editMachine = `Update "machine" Set machine_name = $2, faculty = $3, all_profile = $4 Where machine_name = $1`
 const deleteMachine = `Delete From "machine" Where machine_name = $1`
 
 //Todo ------------------------------------------------------------------------------ < Table: profile_of_waste >
@@ -28,14 +28,14 @@ const selectAll_record = `Select * from "record"`
 
 const checkRecord_HistoryExists = `Select s from "record" s where s.create_date = $1 and s.machine_name = $2 and s.waste_profile = $3`
 const newRecord = `insert into "record" (unique_id, create_date, faculty, machine_name, waste_profile, weight, create_time) values($1, $2, $3, $4, $5, $6, $7)`
-const selectFor_summary = `Select * from "record" Where create_date >= $3 And create_date <= $4 And faculty = $2 And waste_profile = ANY($1) Order by create_date ASC`
+const selectFor_summary = `Select create_date, waste_profile, weight from "record" Where create_date >= $3 And create_date <= $4 And faculty = ANY($2) And waste_profile = ANY($1) Order by create_date Asc, create_time Asc`
 /* 
-    SELECT * FROM public.record
+    SELECT create_date, waste_profile, weight FROM public.record
     Where create_date >= '2024-03-28' 
-        And create_date <= '2024-04-01' 
-        And faculty = 'สถาบันวิทยาการหุ่นยนต์ภาคสนาม' 
+        And create_date <= '2024-04-20' 
+        And faculty = Any(array['สถาบันวิทยาการหุ่นยนต์ภาคสนาม', 'คณะวิศวกรรมศาสตร์'])
         And waste_profile = Any(array['กระป๋อง', 'ขวดพลาสติก']) 
-    Order by create_date Desc
+    Order by create_date Asc, create_time Asc
 */
 const oldDayRecord = `Select create_date from "record" Order By create_date ASC Limit 1`
 
