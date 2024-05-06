@@ -12,7 +12,7 @@ router.get("/machine/faculty", controller.selectAll_faculty) //*
 router.get("/machine/all", controller.selectAll_machine) //*
 router.get("/machine/all/forDashboard", controller.selectAll_machine_forDashboard) //*
 router.post("/machine/add", controller.newMachine) //*
-router.put("/machine/edit", controller.editMachine) //!
+router.put("/machine/edit", controller.editMachine) //*
 router.delete("/machine/delete", controller.deleteMachine) //*
 
 //Todo ------------------------------------------------------------------------------ < Table: profile_of_waste >
@@ -22,9 +22,9 @@ router.post("/profile_of_waste/add", controller.newWaste) //? optional
 
 //Todo ------------------------------------------------------------------------------ < Table: record >
 router.get("/record/all", controller.selectAll_record) //*
-router.get("/record/summary", controller.summary) //!
+router.post("/record/summary", controller.summary) //*
 router.post("/record/add", controller.newRecord) //*
-router.get("/record/oldDayRecord", controller.oldDayRecord) //** */
+router.get("/record/oldDayRecord", controller.oldDayRecord) //*
 
 
 module.exports = router
