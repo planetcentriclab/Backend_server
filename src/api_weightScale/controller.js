@@ -1,11 +1,11 @@
-const pool = require('../../db/db_weightScale')
+const pool = require('../../db/db_weightScale') 
 const querise = require('./queries')
 
 //* < MILD requirement >
 const selectAll_profile_of_waste_thai = (req, res) => {
     pool.query(querise.selectAll_profile_of_waste_thai , (error, result) => {
         if (error) throw error;
-        res.status(200).json(result.rows)
+        res.status(200).json(result.rows) 
     })
 }
 const selectAll_faculty = (req, res) => {
@@ -14,6 +14,39 @@ const selectAll_faculty = (req, res) => {
         res.status(200).json(result.rows)
     })
 }
+const selectAll_carbonFactor = (req, res) => {
+    pool.query(querise.selectAll_carbonFactor , (error, result) => {
+        if (error) throw error;
+        res.status(200).json(result.rows)
+    })
+}
+const editCarbonFactor = (req, res) => {
+    // console.log(req.body)
+
+    pool.query(querise.editCarbonFactor, [
+        req.body[0].carbon_factor,
+        req.body[1].carbon_factor,
+        req.body[2].carbon_factor,
+        req.body[3].carbon_factor,
+        req.body[4].carbon_factor,
+        req.body[5].carbon_factor,
+        req.body[6].carbon_factor,
+        req.body[7].carbon_factor,
+        req.body[8].carbon_factor,
+        req.body[9].carbon_factor,
+        req.body[10].carbon_factor,
+        req.body[11].carbon_factor,
+        req.body[12].carbon_factor,
+        req.body[13].carbon_factor,
+        req.body[14].carbon_factor,
+        req.body[15].carbon_factor,
+        req.body[16].carbon_factor,
+    ], (error, result) => {
+        if (error) throw error;
+        res.status(201).send(`Edited Carbon Factor of successfully.!`)
+    })
+}
+
 
 //Todo ------------------------------------------------------------------------------ < Table: machine >
 const selectAll_machine = (req, res) => {
@@ -183,36 +216,27 @@ const summary = (req, res) => {
     const {profile_waste, faculty, start_date, end_date} = req.body
     // console.log(req.body)
 
-    pool.query(querise.selectAll_profile_of_waste_thai , (error, result) => {
+    pool.query(querise.selectAll_carbonFactor , (error, result) => {
         if (error) throw error;
-        console.log(result.rows);
-        const profile_of_waste = result.rows
+        // console.log(result.rows);
+
+        const profile_of_waste = result.rows.map(item => {
+            return { "waste_profile_thai": item.waste_profile_thai };
+        })
+
+        // console.log(profile_of_waste)
+
+        const carbonFactors = {}
+        result.rows.forEach(item => {
+            carbonFactors[item.waste_profile_thai] = item.carbon_factor;
+        })        
 
         pool.query(querise.selectFor_summary, [profile_waste, faculty, start_date, end_date], (error, result) =>{
             if (error) throw error;
-            console.log(result.rows);
+            // console.log(result.rows);
 
             function calculateWasteAmount(data1, data2) {
                 const wasteMap = {};
-                const carbonFactors = {
-                    'กระป๋อง': 2,
-                    'ถุงวิบวับ': 2,
-                    'เศษอาหาร': 2,
-                    'แก้ว': 2,
-                    'ขยะอันตราย': 2,
-                    'กล่องนม': 2,
-                    'ขยะทั่วไป': 2,
-                    'ขยะกำพร้า': 2,
-                    'กระดาษ': 2,
-                    'ถุงพลาสติก': 2,
-                    'ขวดพลาสติก': 2,
-                    'กล่องอาหารพลาสติก': 2,
-                    'แก้วน้ำพลาสติก(ขายไม่ได้)': 2,
-                    'แก้วน้ำพลาสติก(ขายได้)': 2,
-                    'ช้อนส้อมพลาสติก': 2,
-                    'หลอดพลาสติก': 2,
-                    'ขยะห้องน้ำ': 2
-                };
         
                 data1.forEach(item => {
                     const profile = item.waste_profile;
@@ -254,85 +278,6 @@ const summary = (req, res) => {
         })
     })
 }
-        // *---------------------------------------------------------
-    //     function calculateWasteAmount(data){
-    //         const wasteMap = {}
-    //         const carbonFactor = {
-    //             'กระป๋อง': 2,
-    //             'ถุงวิบวับ': 2,
-    //             'เศษอาหาร': 2,
-    //             'แก้ว': 2,
-    //             'ขยะอันตราย': 2,
-    //             'กล่องนม': 2,
-    //             'ขยะทั่วไป': 2,
-    //             'ขยะกำพร้า': 2,
-    //             'กระดาษ': 2,
-    //             'ถุงพลาสติก': 2,
-    //             'ขวดพลาสติก': 2,
-    //             'กล่องอาหารพลาสติก': 2,
-    //             'แก้วน้ำพลาสติก(ขายไม่ได้)': 2,
-    //             'แก้วน้ำพลาสติก(ขายได้)': 2,
-    //             'ช้อนส้อมพลาสติก': 2,
-    //             'หลอดพลาสติก': 2,
-    //             'ขยะห้องน้ำ': 2
-    //         }
-
-    //         let total_waste_detail;
-    //         let total_carbon_detail;
-    //         let amount_waste_detail;
-    //         let amount_carbon_detail;
-    //         let first_create_date;
-
-    //         if(Array.isArray(data) && data.length === 0){
-    //             total_waste_detail = 0
-    //             total_carbon_detail = 0
-    //             amount_waste_detail = 0
-    //             amount_carbon_detail = 0
-    //             first_create_date = 0   
-    //         }
-    //         else{
-    //             data.forEach(item => {
-    //                 const profile = item.waste_profile;
-    //                 const weight = parseFloat(item.weight);
-    //                 if (wasteMap[profile]) {
-    //                     wasteMap[profile] += weight;
-    //                 } 
-    //                 else {
-    //                     wasteMap[profile] = weight;
-    //                 }
-    //             });
-    
-    //             amount_waste_detail = Object.keys(wasteMap).map(profile => {
-    //                 return {
-    //                     profile: profile,
-    //                     amount: parseFloat((wasteMap[profile]).toFixed(2))
-    //                 };
-    //             });
-    
-    //             amount_carbon_detail = Object.keys(wasteMap).map(profile => {
-    //                 const amount = wasteMap[profile];
-    //                 const factor = carbonFactor[profile];
-    //                 return {
-    //                     profile: profile,
-    //                     amount: parseFloat((amount * factor).toFixed(2))
-    //                 };
-    //             });
-    
-    //             total_waste_detail = parseFloat((amount_waste_detail.reduce((total, item) => total + item.amount, 0)).toFixed(2))
-    
-    //             total_carbon_detail = parseFloat((amount_carbon_detail.reduce((total, item) => total + item.amount, 0)).toFixed(2))
-
-    //             first_create_date = data[0].create_date
-    //         }
-
-    //         return {total_waste_detail, total_carbon_detail, amount_waste_detail, amount_carbon_detail, first_create_date}
-    //     }
-
-    //     const jsonData = calculateWasteAmount(result.rows)
-    //     // console.log(jsonData)
-    //     res.status(200).json(jsonData)
-//     })
-// }
 
 const newRecord = (req, res) => {
     const {faculty, machine_name, waste_profile, weight} = req.body
@@ -347,20 +292,6 @@ const newRecord = (req, res) => {
         if (error) throw error;
         res.status(201).send("Adding new record successfully.!")
     })
-    // //*------------ < check if Record exists >
-    // pool.query(querise.checkRecord_HistoryExists, [create_date, machine_name, waste_profile], (error, result) => {
-    //     if(resuslt.rows.length){
-    //         res.send("This Record_History already exists ~! can't POSE")
-    //     }
-    //     else{
-    //         //*------------ < add new record  >
-    //         const UUID = crypto.randomUUID()
-    //         pool.query(querise.newRecord, [UUID, create_date, faculty, machine_name, waste_profile, weight], (error, result) => {
-    //             if (error) throw error;
-    //             res.status(201).send("Adding new record successfully.!")
-    //         })
-    //     }
-    // })
 }
 
 const oldDayRecord = (req, res) => {
@@ -370,13 +301,88 @@ const oldDayRecord = (req, res) => {
     })
 }
 
+const generateCSV = (req, res) => {
+    const {faculty, start_date, end_date} = req.body
+    // const faculty = req.body.faculty
+    // const startDate = req.body.start_date
+    // const endDate = req.body.end_date
+
+    // console.log(start_date)
+
+    pool.query(querise.selectAll_profile_of_waste_thai , (error, result) => {
+        if (error) throw error;
+        
+        const all_waste_profile = result.rows
+        // console.log(all_waste_profile)
+
+        pool.query(querise.selectFor_CSV, [faculty, start_date, end_date], (error, result) => {
+            if (error) throw error;
+
+
+            const generateAfterData = (start_date, end_date, recordHistory) => {
+            
+                const formatDateThai = (date) => {
+                    const d = new Date(date);
+                    const day = d.getDate().toString().padStart(2, '0');
+                    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                    const year = (d.getFullYear() + 543).toString();
+                    return `${day}/${month}/${year}`;
+                };
+            
+                const stripTime = (date) => {
+                    const d = new Date(date);
+                    return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+                };
+            
+                const afterData = {};
+            
+                const dateRange = [];
+                let currentDate = stripTime(start_date);
+                const endDate = stripTime(end_date);
+            
+                while (currentDate <= endDate) {
+                    dateRange.push(formatDateThai(currentDate));
+                    currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+                }
+            
+                dateRange.forEach(date => {
+                    afterData[date] = all_waste_profile.map(item => ({ profile: item.waste_profile_thai, amount: 0 }));
+                });
+            
+                recordHistory.forEach(item => {
+                    const createDate = stripTime(item.create_date);
+                    const key = formatDateThai(createDate);
+                    if (afterData[key]) {
+                        const wasteProfileIndex = afterData[key].findIndex(profile => profile.profile === item.waste_profile);
+                        if (wasteProfileIndex !== -1) {
+                            afterData[key][wasteProfileIndex].amount += parseFloat(item.weight);
+                        }
+                    }
+                });
+
+                // Round the amounts to 2 decimal places
+                Object.keys(afterData).forEach(date => {
+                    afterData[date].forEach(item => {
+                        item.amount = parseFloat(item.amount.toFixed(2));
+                    });
+                });                
+            
+                return afterData;
+            };
+
+            res.status(200).json(generateAfterData(start_date, end_date, result.rows))
+        })
+    })
+}
+
 
 module.exports = {
     //* ======== < MILD requirement >
         //Todo ----- < Table: profile_of_waste >
-            selectAll_profile_of_waste_thai,
+            selectAll_profile_of_waste_thai, 
             selectAll_faculty,
-
+            selectAll_carbonFactor,
+            editCarbonFactor,
     //* ======== < TONPLAM requirement >
 
 
@@ -397,5 +403,6 @@ module.exports = {
             summary,
             newRecord,
             oldDayRecord,
+            generateCSV,
     
 }
