@@ -1,15 +1,16 @@
-//Todo ------------------------------------------------------------------------------ < Table: machine >
+//Todo ------------------------------------------------------------------------------ < Table: select >
 const select_lightIntensity = `Select * from "lightIntensity"`
 const select_temperature = `Select * from "temperature"`
 const select_humidity = `Select * from "humidity"`
 const select_soilTemperature = `Select * from "soilTemperature"`
 const select_soilMoisture = `Select * from "soilMoisture"`
 const select_soilPH = `Select * from "soilPH"`
-const select_waterFlow1 = `Select * from "waterFlow1"`
+const select_waterFlow1 = `Select * from "waterFlow1"` 
 const select_waterFlow2 = `Select * from "waterFlow2"`
 const select_voltageFlow = `Select * from "voltageFlow"`
 const select_currentFlow = `Select * from "currentFlow"`
 
+//Todo ------------------------------------------------------------------------------ < Table: record >
 const newRecord_lightIntensity = `insert into "lightIntensity" (date, time, value_raw, value_con) values($1, $2, $3, $4)`
 const newRecord_temperature = `insert into "temperature" (date, time, value_raw, value_con) values($1, $2, $3, $4)`
 const newRecord_humidity = `insert into "humidity" (date, time, value_raw, value_con) values($1, $2, $3, $4)`
