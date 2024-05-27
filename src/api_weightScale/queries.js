@@ -1,10 +1,33 @@
 //* ======== MILD requirement >
 //Todo ------------------------------------------------------------------------------ < Table: profile_of_waste >
-const selectAll_profile_of_waste_thai = `Select waste_profile_thai from "profile_of_waste"`
+const selectAll_profile_of_waste_thai = `Select waste_profile_thai from "profile_of_waste" ORDER BY waste_profile ASC `
 const selectAll_faculty = `Select Distinct faculty from "machine"`
+const selectAll_carbonFactor = `Select waste_profile_thai, carbon_factor from "profile_of_waste" ORDER BY waste_profile ASC `
+const editCarbonFactor = `
+    UPDATE "profile_of_waste"
+    SET carbon_factor = 
+        CASE 
+            WHEN waste_profile_thai = 'กระป๋อง' THEN $1 ::numeric
+            WHEN waste_profile_thai = 'ถุงวิบวับ' THEN $2 ::numeric
+            WHEN waste_profile_thai = 'เศษอาหาร' THEN $3 ::numeric
+            WHEN waste_profile_thai = 'แก้ว' THEN $4 ::numeric
+            WHEN waste_profile_thai = 'ขยะอันตราย' THEN $5 ::numeric
+            WHEN waste_profile_thai = 'กล่องนม' THEN $6 ::numeric
+            WHEN waste_profile_thai = 'ขยะทั่วไป' THEN $7 ::numeric
+            WHEN waste_profile_thai = 'ขยะกำพร้า' THEN $8 ::numeric
+            WHEN waste_profile_thai = 'กระดาษ' THEN $9 ::numeric
+            WHEN waste_profile_thai = 'ถุงพลาสติก' THEN $10 ::numeric
+            WHEN waste_profile_thai = 'ขวดพลาสติก' THEN $11 ::numeric
+            WHEN waste_profile_thai = 'กล่องอาหารพลาสติก' THEN $12 ::numeric
+            WHEN waste_profile_thai = 'แก้วน้ำพลาสติก(ขายไม่ได้)' THEN $13 ::numeric
+            WHEN waste_profile_thai = 'แก้วน้ำพลาสติก(ขายได้)' THEN $14 ::numeric
+            WHEN waste_profile_thai = 'ช้อนส้อมพลาสติก' THEN $15 ::numeric
+            WHEN waste_profile_thai = 'หลอดพลาสติก' THEN $16 ::numeric
+            WHEN waste_profile_thai = 'ขยะห้องน้ำ' THEN $17 ::numeric
+        END;
+`
 
-
-//* ======== TONPLAM requirement >
+//* ======== TONPLAM requirement >editCarbonFactor
 
 
 //* ======== < DEFAULT >
@@ -18,10 +41,10 @@ const deleteMachine = `Delete From "machine" Where machine_name = $1`
 //Todo ------------------------------------------------------------------------------ < Table: profile_of_waste >
 const selectAll_profile_of_waste = `Select * from "profile_of_waste"`
 const checkWaste_profileExists = `Select s from "profile_of_waste" s where s.waste_profile = $1`
-const newWaste = `insert into "profile_of_waste" (waste_profile) values($1)`
+const newWaste = `insert into "profile_of_waste" (waste_profile) values($1)` 
 
 //Todo ------------------------------------------------------------------------------ < Table: record >
-const selectAll_record = `Select * from "record"`
+const selectAll_record = `Select * from "record"` 
 // Select create_date, faculty, machine_name, waste_profile, weight
 // from public.record
 // Order By create_date Desc, create_time Desc, machine_name Desc
@@ -38,13 +61,16 @@ const selectFor_summary = `Select create_date, waste_profile, weight from "recor
     Order by create_date Asc, create_time Asc
 */
 const oldDayRecord = `Select create_date from "record" Order By create_date ASC Limit 1`
+const selectFor_CSV = `Select create_date, waste_profile, weight from "record" Where create_date >= $2 And create_date <= $3 And faculty = ANY($1) Order by create_date Asc, create_time Asc`
+
 
 module.exports = {
     //* ======== < MILD requirement >
         //Todo ----- < Table: profile_of_waste >
             selectAll_profile_of_waste_thai,
             selectAll_faculty,
-
+            selectAll_carbonFactor,
+            editCarbonFactor,
 
     //* ======== < TONPLAM requirement >
 
@@ -68,4 +94,5 @@ module.exports = {
             newRecord,
             selectFor_summary,
             oldDayRecord,
+            selectFor_CSV,
 }
