@@ -5,7 +5,7 @@ const querise = require('./queries')
 const select_lightIntensity = (req, res) => {
     pool.query(querise.select_lightIntensity , (error, result) => {
         if (error) throw error;
-        res.status(200).json(result.rows)
+        res.status(200).json(result.rows) 
     })
 }
 const select_temperature = (req, res) => {
