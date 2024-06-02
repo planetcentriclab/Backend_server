@@ -139,12 +139,12 @@ const newRecord = (req, res) => {
         currentFlow_out
     } = req.body
 
-    // console.log(req.body)
+    console.log(req.body)
 
-    const create_date = new Date().toISOString().slice(0, 10)
-    const create_time = new Date().toLocaleTimeString('en-US', {timeZone: 'Asia/Bangkok', hour12: false})
-    if (create_time.startsWith("24")) {
-        create_time = create_time.replace(/^24/, "00"); 
+    const current_date = new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Bangkok'}).slice(0, 10)
+    const current_time = new Date().toLocaleTimeString('en-US', {timeZone: 'Asia/Bangkok', hour12: false})
+    if (current_time.startsWith("24")) {
+        current_time = current_time.replace(/^24/, "00"); 
     }
 
     pool.query(querise.newRecord_methane, [create_date, create_time, methane.data_0, methane.data_1])
