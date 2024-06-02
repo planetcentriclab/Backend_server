@@ -80,10 +80,10 @@ const newRecord = (req, res) => {
 
     console.log(`Get request!`)
 
-    const current_date = new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Bangkok'}).slice(0, 10)
-    const current_time = new Date().toLocaleTimeString('en-US', {timeZone: 'Asia/Bangkok', hour12: false})
-    if (current_time.startsWith("24")) {
-        current_time = current_time.replace(/^24/, "00"); 
+    const create_date = new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Bangkok'}).slice(0, 10)
+    const create_time = new Date().toLocaleTimeString('en-US', {timeZone: 'Asia/Bangkok', hour12: false})
+    if (create_time.startsWith("24")) {
+        create_time = create_time.replace(/^24/, "00"); 
     }
 
     pool.query(querise.newRecord_lightIntensity, [create_date, create_time, lightIntensity.value_raw, lightIntensity.value_con])
